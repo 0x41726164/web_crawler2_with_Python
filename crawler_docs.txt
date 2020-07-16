@@ -1,0 +1,39 @@
+import urllib.request, urllib.parse, urllib.error # url library package
+from bs4 import BeautifulSoup # beautiful soup package
+
+# getting start-url from the user
+url = input('enter seed: ')
+url_list = list()
+url_list.append(url)
+print(url_list)
+
+# main loop - starts here
+while True:
+    print('inside while loop')
+
+    for u in url_list:
+        print('inside for loop')
+        # getting urls and avoiding unnecessary errors
+        try:
+            destination = urllib.request.urlopen(u).read()
+            print('openned the url')
+        except:
+            print('not a valid url')
+            continue
+
+        # getting anchors and references
+        bsoup_entry = BeautifulSoup(destination, 'html.parser')
+        print('soup works')
+        ls = bsoup_entry('a')
+        print('anchors split')
+
+        if len(ls) < 1:
+            print('empty list')
+            continue
+        for l in ls:
+            print('inside second for loop')
+            print(l.get('href', None), ':', l.contents[0])
+            url_list.append(l.get('href', None))
+
+    print('end of while loop')
+    break
